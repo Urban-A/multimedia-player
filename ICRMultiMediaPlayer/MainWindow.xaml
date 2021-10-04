@@ -1,0 +1,93 @@
+﻿<Window x:Class="ICRMultiMediaPlayer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ICRMultiMediaPlayer"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+        MinHeight="93" MinWidth="280" Background="#FF2C2C2C">
+
+    <Window.Resources>
+        <Style TargetType="TextBlock" x:Key="ListItemVideo">
+            <Setter Property="Foreground" Value="#FF303030"/>
+            <Setter Property="FontWeight" Value="DemiBold" />
+            <Setter Property="FontStyle" Value="Normal" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=Predvajan}" Value="True">
+                    <Setter Property="Foreground" Value="#FF060606" />
+                    <Setter Property="FontWeight" Value="Bold" />
+                    <Setter Property="FontStyle" Value="Normal" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        
+        <Style TargetType="DockPanel" x:Key="ListItemVideoBackground">
+            <Setter Property="Background" Value="White"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="AliceBlue"/>
+                </Trigger>
+                <DataTrigger
+                Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}"
+                Value="True">
+                    <Setter Property="Background" Value="#FFCBE8F6"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=Predvajan}" Value="True">
+                    <Setter Property="Background" Value="#FFCBCBCB" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <DockPanel LastChildFill="True">
+        
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Background="#FFF0F0F0">
+            <Menu>
+                <MenuItem Header="Datoteka">
+                    <MenuItem Header="Izhod" Name="izhodBtn" Click="izhodBtn_Click"></MenuItem>
+                    <MenuItem Header="Uvozi"  Name="UvoziBtn" Click="UvoziBtn_Click"></MenuItem>
+                    <MenuItem Header="Izvozi"  Name="IzvoziBtn" Click="IzvoziBtn_Click"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="Seznam">
+                    <MenuItem Header="Dodaj" Name="dodajBtn" Click="dodajBtn_Click"></MenuItem>
+                    <MenuItem Header="Odstrani" Name="odstraniBtn" Click="odstraniBtn_Click"></MenuItem>
+                    <MenuItem Header="Uredi"  Name="urediBtn" Click="urediBtn_Click"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="Orodja">
+                    <MenuItem Header="Nastavitve" Name="nastavitveBtn" Click="nastavitveBtn_Click"></MenuItem>
+                </MenuItem>
+            </Menu>
+        </StackPanel>
+
+        <local:UserControlPlay Toggle="TogglePlaylist" PrevPl="SelectPrev" NextPl="SelectNext" DockPanel.Dock="Bottom" x:Name="playControls" Loaded="playControls_Loaded"/>
+
+        <ListView DockPanel.Dock="Left" Name="playlist" SelectionChanged="playlist_SelectionChanged" MouseDoubleClick="playlist_MouseDoubleClick"  MaxWidth="500" MinWidth="50" Visibility="Visible">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel Style="{StaticResource ListItemVideoBackground}">
+                        <Image Source="{Binding Slika}" Width="160" Height="90" DockPanel.Dock="Left" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                        <Separator DockPanel.Dock="Bottom"/>
+                        <StackPanel Margin="2" Orientation="Vertical" DockPanel.Dock="Right">
+                            <TextBlock Text="{Binding Pot}" Style="{StaticResource ListItemVideo}"/>
+                            <TextBlock Text="{Binding Zvrst, StringFormat=Zvrst: {0}}" FontStyle="Italic"/>
+                            <TextBlock Text="{Binding Opis}" Width="200" TextWrapping="Wrap" HorizontalAlignment="Left"/>
+                            <TextBlock Text="{Binding DatumIzdaje, StringFormat={}{0:MM/dd/yyyy}}"/>
+                            <TextBlock Text="{Binding Ocena, StringFormat=Ocena: {0}/10}" />
+
+                        </StackPanel>
+                    </DockPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        
+
+        <MediaElement DockPanel.Dock="Top" Name="mediaPlayer" LoadedBehavior="Manual" >
+        </MediaElement>
+
+
+
+
+    </DockPanel>
+</Window>
